@@ -36,7 +36,7 @@ Your Bot Your bot consists of a main body, a display (on which your Twitch avata
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://talosfray.tv/docs/details/</guid>
-      <description>Details CPU Specs    Cores Threads Base clock Multiplier     1 1 200hz 1     Warning: This program will not function in battle. If you want to try it out, please do so in the testbed.
+      <description>Details CPU Specs    Cores Threads Clock     1 1 200hz     Warning: This program will not function in battle. If you want to try it out, please do so in the emulator.
  var a = 5; if(a &amp;gt; 3) { log(&amp;#39;hello, there!&amp;#39;); }EVar(&amp;#39;a&amp;#39;,null,EConst(CInt(5))), //3 ops EIf(EBinop(&amp;#39;&amp;gt;&amp;#39;,EIdent(&amp;#39;a&amp;#39;),EConst(CInt(3))), //4 ops EBlock([ //1 op  ECall(EIdent(&amp;#39;log&amp;#39;),[EConst(CString(&amp;#39;hello, there!&amp;#39;))]) //3 ops ]),null)   Switch between the &amp;lsquo;Usage&amp;rsquo; and &amp;lsquo;Bytecode&amp;rsquo; tabs to see how the program translates to machine code.</description>
     </item>
     

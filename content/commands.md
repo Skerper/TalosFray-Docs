@@ -97,6 +97,26 @@ Returns     |Description
 If you are the only bot left alive, this will return a <code>Bot</code> of yourself!
 </aside>
 
+## closest_bot_to(target)
+```haxe
+if(powerup.active){
+	enemy = closest_bot_to(powerup);	//The variable enemy now contains the enemybot closest to the powerup!
+}
+```
+Gets the nearest living bot to any given Position object. 
+
+Argument|Description
+--------|-------------
+target  |Any object with an `id:Int` field. `Bot`s, directions (`LEFT`, `UP`, etc), sectors (`SECTOR3` etc) all work.
+
+Returns     |Description
+------------|-------------------------------------------------------
+`Bot`		|The `Bot` of the nearest living bot to `target`. 
+
+<aside class="notice">
+If you are the only bot left alive, this will return a <code>Bot</code> of yourself!
+</aside>
+
 ## closest_projectile()
 ```haxe
 if(closest_projectile().will_hit(me)){

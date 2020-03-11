@@ -326,8 +326,7 @@ You have to declare functions before you can use them!
 <tr>
 <th>Cores</th>
 <th>Threads</th>
-<th>Base clock</th>
-<th>Multiplier</th>
+<th>Clock</th>
 </tr>
 </thead>
 
@@ -336,13 +335,12 @@ You have to declare functions before you can use them!
 <td>1</td>
 <td>1</td>
 <td>200hz</td>
-<td>1</td>
 </tr>
 </tbody>
 </table>
 
 <blockquote>
-<p>Warning: This program will not function in battle. If you want to try it out, please do so in the testbed.</p>
+<p>Warning: This program will not function in battle. If you want to try it out, please do so in the emulator.</p>
 </blockquote>
 <div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> a <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
 <span class="k">if</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span>
@@ -500,6 +498,48 @@ This includes bots who have dealt a non-damaging status effect to your bot, such
 If you are the only bot left alive, this will return a <code>Bot</code> of yourself!
 </aside>
 
+<h2 id="closest-bot-to-target">closest_bot_to(target)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">active</span><span class="p">){</span>
+    <span class="n">enemy</span> <span class="o">=</span> <span class="n">closest_bot_to</span><span class="p">(</span><span class="n">powerup</span><span class="p">);</span>    <span class="c1">//The variable enemy now contains the enemybot closest to the powerup!</span>
+<span class="p">}</span></code></pre></div>
+<p>Gets the nearest living bot to any given Position object.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>target</td>
+<td>Any object with an <code>id:Int</code> field. <code>Bot</code>s, directions (<code>LEFT</code>, <code>UP</code>, etc), sectors (<code>SECTOR3</code> etc) all work.</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> of the nearest living bot to <code>target</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="notice">
+If you are the only bot left alive, this will return a <code>Bot</code> of yourself!
+</aside>
+
 <h2 id="closest-projectile">closest_projectile()</h2>
 <div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">will_hit</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
     <span class="n">log</span><span class="p">(</span><span class="s2">&#34;we&#39;re doomed&#34;</span><span class="p">);</span>
@@ -542,35 +582,6 @@ If you are the only bot left alive, this will return a <code>Bot</code> of yours
 
 <aside class="notice">
 This is just an alias of <code>set_destination_to</code> to make typing quicker.
-</aside>
-
-<h2 id="get-energy-consumption">get_energy_consumption()</h2>
-
-<aside class="caution">
-This is an advanced technique.
-</aside>
-<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">request_cpu_multiplier</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-<span class="n">log</span><span class="p">(</span><span class="n">get_energy_consumption</span><span class="p">());</span></code></pre></div>
-<p>Gets your bot&rsquo;s CPU&rsquo;s energy consumption in terms of percentage per second.</p>
-
-<table>
-<thead>
-<tr>
-<th>Returns</th>
-<th>Description</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>Float</td>
-<td>Percentage per second (so 50 would be 50%/s, emptying the energy bar in two seconds)</td>
-</tr>
-</tbody>
-</table>
-
-<aside class='notice'>
-This has little to no use in battle, but can be useful in the testbed for tuning your overclocks. Energy consumption may change between patches, so it is worth checking your calculations are still relevant from time to time.
 </aside>
 
 <h2 id="keep-long-distance">keep_long_distance()</h2>
@@ -761,70 +772,6 @@ When <code>max</code> is negative, the behaviour is undefined.
 Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
 </aside>
 
-<h2 id="request-cpu-base-clock-clock">request_cpu_base_clock(clock)</h2>
-<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">energy</span><span class="o">&gt;</span><span class="mi">50</span><span class="p">){</span>
-    <span class="n">request_cpu_base_clock</span><span class="p">(</span><span class="mi">300</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
-<p>Attempts to change the base clock-rate of your bot&rsquo;s cpu.</p>
-
-<table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>clock</td>
-<td>An integer between 1 and 500, inclusive</td>
-</tr>
-</tbody>
-</table>
-
-<aside class='warning'>
-Increasing your base clock over the default will RAPIDLY consume energy per cpu instruction. If your energy drops to zero, you will return to default clock.
-</aside>
-
-<aside class='success'>
-Base clock is mainly for fine-tuning. For example, you could increase your multiplier to 2 and reduce your base clock to 150 if you only needed a slight bump.
-</aside>
-
-<aside class='notice'>
-The maximum clock/multiplier is due to the speed of SkerpSkerp's server. I can't give you more CPU than I have!!
-</aside>
-
-<h2 id="request-cpu-multiplier-mult">request_cpu_multiplier(mult)</h2>
-<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">energy</span><span class="o">&gt;</span><span class="mi">50</span><span class="p">){</span>
-    <span class="n">request_cpu_multiplier</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
-<p>Attempts to change the instructions-per-clock-cycle multiplier of your bot&rsquo;s cpu.</p>
-
-<table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>mult</td>
-<td>An integer between 1 and 5, inclusive</td>
-</tr>
-</tbody>
-</table>
-
-<aside class='warning'>
-Increasing your multiplier over the default will consume energy per cpu instruction. If your energy drops to zero, you will return to default multiplier.
-</aside>
-
-<aside class='notice'>
-The maximum clock/multiplier is due to the speed of SkerpSkerp's server. I can't give you more CPU than I have!!
-</aside>
-
 <h2 id="set-destination-to-target">set_destination_to(target)</h2>
 <div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR1</span><span class="p">);</span>    <span class="c1">//Destination will be the top-left sector.</span></code></pre></div>
 <p>Sets the destination of the bot&rsquo;s movement to &lsquo;target&rsquo;.</p>
@@ -955,10 +902,6 @@ Setting the sleep timer doesn't do anything unless you also call <code>sleep_unt
 
 <aside class='info'>
 You can set multiple wake conditions using bitwise or (|). For example, to wake on UPDATE or POWERUP_APPEARS, use <code>sleep_until(UPDATE|POWERUP_APPEARS)</code>.
-</aside>
-
-<aside class='success'>
-No matter how high your clock rate and multiplier settings, the CPU does not consume energy while sleeping.
 </aside>
 
 <h2 id="stop-advancing">stop_advancing()</h2>
