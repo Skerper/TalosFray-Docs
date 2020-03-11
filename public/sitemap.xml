@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://talosfray.tv/docs/main/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/tutorials/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/details/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/commands/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/properties/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/types/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/items/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/constants/</loc>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://talosfray.tv/docs/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

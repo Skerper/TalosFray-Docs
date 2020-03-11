@@ -1,0 +1,23 @@
+baseURL = "http://talosfray.tv/docs"
+languageCode = "en-us"
+title = "TalosFray Guide"
+theme = "docuapi"
+pygmentsCodefences = true
+pygmentsCodeFencesGuesSsyntax = false
+pygmentsOptions = ""
+pygmentsStyle = "monokai"
+# The monokai stylesheet is included in the base template.
+pygmentsUseClasses = true
+
+defaultContentLanguage = "en"
+
+[params]
+search = true
+  
+# Configure the language example tabs.
+[[params.language_tabs]]
+key = "haxe"
+name = "Usage" 
+[[params.language_tabs]]
+key = "javascript"
+name = "Bytecode"

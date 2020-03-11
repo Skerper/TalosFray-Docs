@@ -1,0 +1,1 @@
+hugo server -t docuapi --bind=192.168.0.5 --baseURL=http://192.168.0.5:1313

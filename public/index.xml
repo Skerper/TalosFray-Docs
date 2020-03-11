@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TalosFray Guide</title>
+    <link>http://talosfray.tv/docs/</link>
+    <description>Recent content on TalosFray Guide</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="http://talosfray.tv/docs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introduction</title>
+      <link>http://talosfray.tv/docs/main/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/main/</guid>
+      <description>TalosFray Welcome! This is an instruction manual for programming battle robots.</description>
+    </item>
+    
+    <item>
+      <title>Tutorials</title>
+      <link>http://talosfray.tv/docs/tutorials/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/tutorials/</guid>
+      <description>Tutorials Introduction So you want to make a fighting robot? Well, you&amp;rsquo;ve come to the right place! This series of tutorials should get you up and running with a bot in no time.
+Firstly, some technical details about bot battles.
+Your Bot Your bot consists of a main body, a display (on which your Twitch avatar is shown), four slots for items, and a CPU. The main body is circular, and takes care of movement.</description>
+    </item>
+    
+    <item>
+      <title>Details</title>
+      <link>http://talosfray.tv/docs/details/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/details/</guid>
+      <description>Details CPU Specs    Cores Threads Base clock Multiplier     1 1 200hz 1     Warning: This program will not function in battle. If you want to try it out, please do so in the testbed.
+ var a = 5; if(a &amp;gt; 3) { log(&amp;#39;hello, there!&amp;#39;); }EVar(&amp;#39;a&amp;#39;,null,EConst(CInt(5))), //3 ops EIf(EBinop(&amp;#39;&amp;gt;&amp;#39;,EIdent(&amp;#39;a&amp;#39;),EConst(CInt(3))), //4 ops EBlock([ //1 op  ECall(EIdent(&amp;#39;log&amp;#39;),[EConst(CString(&amp;#39;hello, there!&amp;#39;))]) //3 ops ]),null)   Switch between the &amp;lsquo;Usage&amp;rsquo; and &amp;lsquo;Bytecode&amp;rsquo; tabs to see how the program translates to machine code.</description>
+    </item>
+    
+    <item>
+      <title>Commands</title>
+      <link>http://talosfray.tv/docs/commands/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/commands/</guid>
+      <description>Commands These are functions that are available anywhere in your botcode.
+advance() var enemy = closest_bot(); //Select the nearest active bot (Could be yourself...!) set_destination_to(enemy); //The enemy is our destination advance(); //Charge! advance sets your bot to move towards whatever is set as its destination. advance is the default behavior of the bot, so you don&amp;rsquo;t need to call it unless you&amp;rsquo;ve previously told it to do something other than advance.</description>
+    </item>
+    
+    <item>
+      <title>Properties</title>
+      <link>http://talosfray.tv/docs/properties/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/properties/</guid>
+      <description>Properties These are variables and objects that are accessible from anywhere within your bot code.
+battle if(battle.over){ log(&amp;#34;Home time!&amp;#34;); } The BattleDetails object reference, containing information about this bout.
+I if(I.am.above(him)){ log(&amp;#34;Wa ha ha&amp;#34;); } Our Self object. Contains useful info about our own bot&amp;rsquo;s status.
+item1 if(item1.ready){ item1.fire(); } The Item installed in Slot #1.
+item2 if(item2.ready){ item2.fire(); } The Item installed in Slot #2.
+item3 if(item3.ready){ item3.fire(); } The Item installed in Slot #3.</description>
+    </item>
+    
+    <item>
+      <title>Types</title>
+      <link>http://talosfray.tv/docs/types/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/types/</guid>
+      <description>Types There are several datatypes with their own properties and methods that are used to control your bot.
+All of the read-only data in these types are updated 60 times a second. Commands made by calling methods and so on are also only delivered to the rest of the bot&#39;s hardware 60 times a second.  These types aren&#39;t the physical objects themselves - they are only ways to organize information our bot knows about them.</description>
+    </item>
+    
+    <item>
+      <title>Items</title>
+      <link>http://talosfray.tv/docs/items/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/items/</guid>
+      <description>Items Each bot can carry four items. Items can have offensive, defensive, or aesthetic abilities. Items generally consume ammo, energy, or make your bot slower due to their weight. All items use the same interface to control them, but not all items make use of all the interface&amp;rsquo;s options. This section explains how to use each item, and gives an idea of its capabilities.
+Interface All items, regardless of their type, have the same properties and methods.</description>
+    </item>
+    
+    <item>
+      <title>Constants</title>
+      <link>http://talosfray.tv/docs/constants/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://talosfray.tv/docs/constants/</guid>
+      <description>Constants All-caps properties like the following are just handy pre-defined variables for use with various functions.
+HP (Powerup type) if(powerup.type == HP){ log(&amp;#34;I need that!&amp;#34;); } A possible value of powerup.type.
+ENERGY (Powerup type) if(powerup.type == ENERGY){ log(&amp;#34;I need that!&amp;#34;); } A possible value of powerup.type.
+AMMO (Powerup type) if(powerup.type == AMMO){ log(&amp;#34;I need that!&amp;#34;); } A possible value of Powerup.type.
+CANNON (Projectile type) if(closest_projectile().type == CANNON){ log(&amp;#34;it is a cannonball&amp;#34;); } A possible value of Projectile.</description>
+    </item>
+    
+  </channel>
+</rss>

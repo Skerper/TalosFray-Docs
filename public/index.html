@@ -1,0 +1,2666 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="generator" content="Hugo 0.53" />
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>TalosFray Guide</title>
+    <link href='/docs/slate/stylesheets/monokai.css' rel="stylesheet" media="screen" />
+<link href='/docs/slate/stylesheets/screen.css' rel="stylesheet" media="screen" />
+<link href='/docs/slate/stylesheets/print.css' rel="stylesheet" media="print" />
+
+    
+<script src='/docs/slate/javascripts/all.js'></script>
+
+    
+</head>
+<body class="index" data-languages="[ &#34;haxe&#34; ,  &#34;javascript&#34; ]">
+    <a href="#" id="nav-button">
+        <span>
+        NAV
+        <img src='/docs/slate/images/navbar.png'/>
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+        
+         <img src='/docs/images/logo.png' />
+        
+        <div class="lang-selector">
+            
+            <a href="#" data-language-name="haxe">Usage</a>
+            
+            <a href="#" data-language-name="javascript">Bytecode</a>
+            
+        </div>
+         
+        
+        <div class="search">
+            <input type="search" class="search" id="input-search" placeholder='Search'>
+        </div>
+        <ul class="search-results"></ul>
+        
+        <div id="toc">
+        </div>
+         
+        
+        
+    </div>
+    <div class="page-wrapper">
+        <div class="dark-box"></div>
+        <div class="content">
+            
+    
+        
+
+<h1 id="talosfray">TalosFray</h1>
+
+<p>Welcome! This is an instruction manual for programming battle robots.</p>
+
+    
+        
+
+<h1 id="tutorials">Tutorials</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>So you want to make a fighting robot? Well, you&rsquo;ve come to the right place! This series of tutorials should get you up and running with a bot in no time.</p>
+
+<p>Firstly, some technical details about bot battles.</p>
+
+<h3 id="your-bot">Your Bot</h3>
+
+<p>Your bot consists of a main body, a display (on which your Twitch avatar is shown), four slots for items, and a CPU. The main body is circular, and takes care of movement. If your main body is destroyed, your bot is destroyed.</p>
+
+<h3 id="your-program">Your Program</h3>
+
+<p>You control your bot by writing a program for it to follow. Essentially, you&rsquo;re teaching your bot to fight, by giving it an AI.</p>
+
+<p>The CPU doesn&rsquo;t have direct knowledge of the outside world, nor does it have direct control of your bot&rsquo;s hardware. 60 times a second, it receives an information pack about the battlefield, and at the same time, it sends any commands you&rsquo;ve made to the bot&rsquo;s hardware.</p>
+
+<p>Don&rsquo;t worry about writing complicated targeting or manoeuvring routines using math and so on; this isn&rsquo;t that kind of game. Things like target leading and pathfinding are dealt with by hardware outside of the CPU, with every bot having equal footing in those regards. Your program&rsquo;s chief job is to determine your bots&rsquo;s <em>strategy</em>. Who to target, what to use, where to go, and so on.</p>
+
+<p>Rather than min-maxing numbers or trying to build the best targeting algorithm, your job is to use the information at hand to make the optimal strategy against any other bot you may come up against.</p>
+
+<h3 id="battles">Battles</h3>
+
+<p>Battles take place in the arena, and can be watched on <a href="http://twitch.tv/talosfray">Twitch</a>. Everyone watches the same battle.</p>
+
+<p>Battles are free-for-all, and the last bot standing wins. If a battle takes too long to end, the surviving bot that has dealt the most damage will be judged the winner. In the case of a tie, all bets are cancelled and the round is not recorded.</p>
+
+<h3 id="items">Items</h3>
+
+<p>Your bot can hold up to four items, be they for attack, defense, or manoeuvring. Items have differing weight, and the more you carry, the slower your bot will move.</p>
+
+<h3 id="this-document">This Document</h3>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="c1">//Over here! This is where code examples will be!</span></code></pre></div>
+<blockquote>
+<p>And this is where advice about the code goes.</p>
+</blockquote>
+
+<p>In the following tutorials and documentation, you&rsquo;ll be given code examples to try on your bot. Information will be in the middle column (which you&rsquo;re reading right now), while code examples will be in the column to your right.</p>
+
+<p>Additional hints and tips will be given in the following formats;
+<aside class='success'>
+This green box for tips, tricks, and good-to-know information.
+</aside>
+<aside class='notice'>
+This blue box for extra details and technical explanations.
+</aside>
+<aside class='warning'>
+This red box for warnings, cautions, and gotchas.
+</aside></p>
+
+<h3 id="who-are-these-tutorials-for">Who are these tutorials for?</h3>
+
+<p>If you have little to no programming experience, these tutorials are the right place to start. If you already have a grasp of programming concepts, you might want to skip past the tutorials and just read the API.</p>
+
+<p>However, even if you are a beginner programmer, please note that this is not &lsquo;programming 101&rsquo;. You should first read up on the many tutorials and resources available on concepts such as variables, control structures, and so on. The language used here is hscript, essentially haxe, but concepts learned from Java, Javascript, Actionscript, PHP, C++, and so on, will all apply.</p>
+
+<h2 id="1-getting-started">1. Getting Started</h2>
+
+<p>Enough talk, let&rsquo;s get started!</p>
+
+<h3 id="registration">Registration</h3>
+
+<p>This game is integrated with <a href="http://twitch.tv">Twitch.tv</a>. You will need a free Twitch account to play. Once you have registered on Twitch, you can log in to your bot dashboard with your Twitch account.</p>
+
+<aside class='success'>
+Worried about your Twitch credentials? Don't be! As you will see when you log in, you only ever enter your username and password on Twitch.tv. We have no access to any information that you don't actively agree to give us! Not even your email address. 
+</aside>
+
+<h3 id="installation">Installation</h3>
+
+<p>No software is required to play this game; you can log in to <a href="http://talosfray.tv/">your dashboard</a> with your Twitch account, make your bot, and watch the battles on <a href="http://twitch.tv/talosfray">Twitch</a> entirely in your browser.</p>
+
+<p>You can test your bot code in the emulator, which can be seen to the right of the code editor on your dashboard.</p>
+
+<h3 id="your-first-bot">Your First Bot</h3>
+
+<p>Logging in to the <a href="http://talosfray.tv/">dashboard</a>, you will see that some placeholder code has already been filled out for you, and that your bot has one item - a cannon - installed.</p>
+
+<aside class='notice'>
+You will notice that the `activate` checkbox is left unchecked. Your bot will not appear in battles unless this box is checked, and save is clicked. This is so your half-finished bot doesn't get annihilated before you can even test it! Feel free to deactivate your bot whenever you want to work on it. 
+</aside>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="c1">//Pre-battle stuffs goes here</span>
+            
+
+<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+    <span class="c1">//Sneeky taktix go here  </span>
+<span class="p">}</span></code></pre></div>
+<p>As you can see on the right, the placeholder code is rather empty. The lines beginning with <code>//</code> are comments, and have no bearing on the bot&rsquo;s operation. All that leaves is the <code>while(true)</code> loop, which those with programming experience will know is an endless loop; it will simply repeat the commands inside the curly brackets ad absurdum.</p>
+
+<p>Why an endless loop? Put simply, <strong>if your program ends or crashes, your bot will die. It must continue running for the duration of the battle.</strong></p>
+
+<h3 id="do-something">Do something!!</h3>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="c1">//Pre-battle stuffs goes here</span>
+<span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>   <span class="c1">//select a random bot</span>
+<span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>       <span class="c1">//point our weapons at it</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//move towards it</span>
+
+<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>           <span class="c1">//Fire the cannon!</span>
+<span class="p">}</span></code></pre></div>
+<p>As it is now, your bot will simply sit in the corner until somebody puts it out of its misery. Let&rsquo;s make it do something.</p>
+
+<p>Have a look at the example code. This is an extremely simple control routine for your bot. All it does is pick a random bot, and move towards them while firing at them.</p>
+
+<p>We stored <code>random_bot()</code> in the <code>enemy</code> variable so that we could target and move towards the same bot. If we&rsquo;d written the code like the second example on the right, we may have ended up moving towards one bot while targeting another!</p>
+
+<aside class='notice'>
+The global variable item1 contains the control interface for the item in slot 1. If you moved your cannon to, for example, slot 3, you would have to use item3 instead to control it.
+</aside>
+
+<blockquote>
+<p>Bad example - not storing our randomly selected bot:</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_target_to</span><span class="p">(</span><span class="n">random_bot</span><span class="p">());</span>        <span class="c1">//Set target to a random bot</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">random_bot</span><span class="p">());</span>   <span class="c1">//No guarantee it&#39;s the same bot!</span></code></pre></div>
+<aside class='success'>
+It's a pain to write out <code>set_target_to</code> and <code>set_destination_to</code> all the time. If you're sick of it, you can just use the shorthand <code>target</code> and <code>destination</code> instead.
+</aside>
+
+<h3 id="testing">Testing</h3>
+
+<p>You can test this bot either by activating it and entering it in a battle, or by loading up a target dummy scenario in the editor.</p>
+
+<aside class='notice'>
+To enter your bot in a battle, first ensure that it is activated, then say <code>!menext</code> in the Twitch chat while logged in. You will be entered in the queue to battle. Don't forget to say `!start` to start the stream if it's not currently live!
+</aside>
+
+<p>As you will see, this bot is not terribly effective. It charges towards the enemy, wasting ammunition firing before its turret is even facing the target, and will likely be quickly slaughtered by close-quarter weapons before it can deal any significant damage.</p>
+
+<p>But hey, it&rsquo;s a start!</p>
+
+<h2 id="2-thinking-smarter">2. Thinking Smarter</h2>
+
+<p>The control code we wrote in tutorial 1 works, but just barely. As far as artificial intelligence goes, it&rsquo;s very weak on the &lsquo;intelligence&rsquo; front. It&rsquo;s unlikely that it will ever win a battle!</p>
+
+<h3 id="analysis">Analysis</h3>
+
+<p>There are two main problems with our previous bot. 1) it&rsquo;s wasteful, and 2) it has no sense of self-preservation.</p>
+
+<p>There are many other problems - especially regarding things it <em>should</em> do but doesn&rsquo;t. But these are the two big issues with what it <em>does</em> do, which is shoot at an enemy.</p>
+
+<h3 id="improvement">Improvement</h3>
+
+<blockquote>
+<p>This reads &ldquo;If item1 is ready and the enemy is in medium range to me, fire item1.&rdquo;</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span> <span class="o">&amp;&amp;</span> <span class="n">enemy</span><span class="p">.</span><span class="n">medium_range_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>Regarding wastefulness, it makes sense to only fire your cannon when there&rsquo;s a reasonable chance it will hit its target. Checking the <a href="#cannon">documentation for the cannon</a> tells us that it &lsquo;reports ready&rsquo; when it&rsquo;s pointing at the target, and that it has &lsquo;medium&rsquo; effective range.</p>
+
+<p>As such, we can best expect to hit the enemy when we&rsquo;re within medium range, and the cannon says it&rsquo;s ready.</p>
+
+<p>We can check these conditions with <code>if</code> statements, as shown on the right.</p>
+
+<aside class='notice'>
+'<code>&&</code>' is read 'and'. This is called a 'logical operator'.
+</aside>
+
+<blockquote>
+<p>Which gives us our final control code:</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>   <span class="c1">//select a random bot</span>
+<span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>       <span class="c1">//point our weapons at it</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//move towards it</span>
+<span class="n">keep_medium_distance</span><span class="p">();</span>     <span class="c1">//maintain cannon range</span>
+<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>    
+    <span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span> <span class="o">&amp;&amp;</span> <span class="n">enemy</span><span class="p">.</span><span class="n">medium_range_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+        <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>       <span class="c1">//Fire! But only when ready.</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>Next, the self-preservation issue. It stands to reason that you should never be closer to an enemy than you need to be! You can tell your bot to maintain a certain distance to the enemy.</p>
+
+<p>Since our weapon has medium range, it makes sense to maintain medium distance. We can do this before the <code>while</code> loop, since we only need to say it once.</p>
+
+<h3 id="testing-1">Testing</h3>
+
+<p>Loading up this bot will show it to be markedly more competent than the previous iteration! It will still struggle to make an impact in battles though, as I&rsquo;m sure you can imagine.</p>
+
+<h2 id="3-switching-targets">3. Switching Targets</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">enemy</span><span class="p">.</span><span class="n">alive</span> <span class="p">){</span>             <span class="c1">//If the enemy has expired</span>
+    <span class="n">enemy</span> <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>       <span class="c1">//Pick another at random</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//again, move towards them</span>
+    <span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>       <span class="c1">//again, target them</span>
+    <span class="n">keep_medium_distance</span><span class="p">();</span>     <span class="c1">//again, maintain cannon range</span>
+<span class="p">}</span></code></pre></div>
+<p>In tutorial 2, we wrote a bot that will maintain an appropriate range to its target while shooting at it. As you may have noticed, though, once its target is dead, it just continues shooting at it until it runs out of ammunition. This is not a great strategy, because there are likely to be other bots that need shooting.</p>
+
+<p>Obviously, what we need to do is to change targets once our enemy is defeated. We can do this by checking on our enemy&rsquo;s welfare. A simple method is to check our enemy&rsquo;s <code>alive</code> property. We can&rsquo;t be sure we were the one who killed a bot with <code>alive</code> set to <code>false</code>, but we can at least be certain that that bot is dead, and that it&rsquo;s time to pay our respects and move on.</p>
+
+<blockquote>
+<p>The check, implemented</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>           <span class="c1">//select a random bot</span>
+<span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>               <span class="c1">//point our weapons at it</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>          <span class="c1">//move towards it</span>
+<span class="n">keep_medium_distance</span><span class="p">();</span>             <span class="c1">//maintain cannon range</span>
+<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>    
+    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">enemy</span><span class="p">.</span><span class="n">alive</span> <span class="p">){</span>             <span class="c1">//If the enemy has expired</span>
+        <span class="n">enemy</span> <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>       <span class="c1">//Pick another at random</span>
+        <span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>       <span class="c1">//again, target them</span>
+        <span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//again, move towards them</span>
+        <span class="n">keep_medium_distance</span><span class="p">();</span>     <span class="c1">//again, maintain cannon range</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span> <span class="o">&amp;&amp;</span> <span class="n">enemy</span><span class="p">.</span><span class="n">medium_range_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+        <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>               <span class="c1">//Fire! But only when ready.</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>The code to the right is best placed within our <code>while(true)</code> main loop, so that we check each time cycle whether the enemy has been defeated.</p>
+
+<h3 id="testing-2">Testing</h3>
+
+<p>Try selecting a two- or four-target scenario in the emulator. You&rsquo;ll see that after the first target is killed, your bot will dutifully begin dismantling a different target.</p>
+
+<aside class='success'>
+This is the first bot we've written that may have a chance at winning a round, as it will continue fighting against any living enemy. As long as it has ammunition, it has a chance!
+</aside>
+
+<p>If you enter your bot in some battles and watch how it performs, you might start getting ideas as to how you can improve its strategy. By all means, try them out! There is no need to rigidly follow these tutorials line-by-line; you will learn far quicker by experimenting.</p>
+
+<aside class='notice'>
+If your bot keeps dying right at the start of a round, or when it still has HP, it likely has some kind of error that is causing your control program to crash. Your best bet is to run it in the emulator, and read the error message that comes out!
+</aside>
+
+<h3 id="improvement-1">Improvement</h3>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">function</span> <span class="nf">selectEnemy</span><span class="p">(){</span>
+    <span class="kd">var</span> new_enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>   <span class="c1">//select a random bot</span>
+    <span class="n">set_target_to</span><span class="p">(</span><span class="n">new_enemy</span><span class="p">);</span>       <span class="c1">//point our weapons at it</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">new_enemy</span><span class="p">);</span>  <span class="c1">//move towards it</span>
+    <span class="n">keep_medium_distance</span><span class="p">();</span>         <span class="c1">//maintain cannon range</span>
+    <span class="k">return</span> <span class="n">new_enemy</span><span class="p">;</span>               <span class="c1">//Return the new enemy for storage</span>
+<span class="p">}</span>
+<span class="kd">var</span> enemy <span class="o">=</span> <span class="n">selectEnemy</span><span class="p">();</span>          <span class="c1">//Get our first enemy</span>
+<span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>    
+    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">enemy</span><span class="p">.</span><span class="n">alive</span> <span class="p">){</span>             <span class="c1">//If the enemy has expired</span>
+        <span class="n">enemy</span> <span class="o">=</span> <span class="n">selectEnemy</span><span class="p">();</span>      <span class="c1">//Get a new enemy</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span> <span class="o">&amp;&amp;</span> <span class="n">enemy</span><span class="p">.</span><span class="n">medium_range_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+        <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>               <span class="c1">//Fire! But only when ready.</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>As you may have noticed from the comments, having to type the same commands out multiple times is a drag. If you find yourself reusing code, it might be a good idea to make functions!</p>
+
+<p>Functions are bundles of code that can be called from anywhere. You will probably recognise that in hscript, they&rsquo;re essentially identical to javascript.</p>
+
+<p>The example on the right is not the neatest way to use a function, but it will suit our needs for now. As you can see, we&rsquo;ve collected our enemy-selecting code into one place. Now, we can replace that code in our control program with calls to the function.</p>
+
+<aside class='success'>
+You have to declare functions before you can use them!
+</aside>
+
+    
+        
+
+<h1 id="details">Details</h1>
+
+<h2 id="cpu">CPU</h2>
+
+<h3 id="specs">Specs</h3>
+
+<table>
+<thead>
+<tr>
+<th>Cores</th>
+<th>Threads</th>
+<th>Base clock</th>
+<th>Multiplier</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>200hz</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Warning: This program will not function in battle. If you want to try it out, please do so in the testbed.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> a <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">{</span> 
+    <span class="n">log</span><span class="p">(</span><span class="s1">&#39;hello, there!&#39;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">EVar</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="nx">EConst</span><span class="p">(</span><span class="nx">CInt</span><span class="p">(</span><span class="mi">5</span><span class="p">))),</span>                             <span class="c1">//3 ops
+</span><span class="c1"></span><span class="nx">EIf</span><span class="p">(</span><span class="nx">EBinop</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span><span class="nx">EIdent</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="nx">EConst</span><span class="p">(</span><span class="nx">CInt</span><span class="p">(</span><span class="mi">3</span><span class="p">))),</span>                <span class="c1">//4 ops
+</span><span class="c1"></span><span class="nx">EBlock</span><span class="p">([</span>                                                    <span class="c1">//1 op
+</span><span class="c1"></span>    <span class="nx">ECall</span><span class="p">(</span><span class="nx">EIdent</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">),[</span><span class="nx">EConst</span><span class="p">(</span><span class="nx">CString</span><span class="p">(</span><span class="s1">&#39;hello, there!&#39;</span><span class="p">))])</span> <span class="c1">//3 ops
+</span><span class="c1"></span><span class="p">]),</span><span class="kc">null</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Switch between the &lsquo;Usage&rsquo; and &lsquo;Bytecode&rsquo; tabs to see how the program translates to machine code. Each keyword beginning with &ldquo;E&rdquo; represents one expression, taking one CPU clock cycle to execute. This program takes 11 clock cycles to run - 0.055 seconds at default clock speed.</p>
+</blockquote>
+
+<h3 id="overview">Overview</h3>
+
+<p>Your bot&rsquo;s CPU is a single-threaded, single-core <a href="https://en.wikipedia.org/wiki/Complex_instruction_set_computer">CISC processor</a>. While it has a very slow clock speed, it is capable of achieving a lot with each instruction.</p>
+
+<p>The CPU&rsquo;s machine code is <a href="https://github.com/HaxeFoundation/hscript">hscript</a> bytecode, and hscript itself is a subset of the <a href="https://haxe.org/">Haxe</a> programming language. Hscript can do many things Haxe can do, so it is a good stepping stone if you are interested in learning Haxe.</p>
+
+<p>In the Haxe language, <a href="https://code.haxe.org/category/principles/everything-is-an-expression.html">everything is an expression</a>. In your bot CPU, every expression is an operation, taking one clock cycle to execute.</p>
+
+    
+        
+
+<h1 id="commands">Commands</h1>
+
+<p>These are functions that are available anywhere in your botcode.</p>
+
+<h2 id="advance">advance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//Select the nearest active bot (Could be yourself...!)</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//The enemy is our destination</span>
+<span class="n">advance</span><span class="p">();</span>                  <span class="c1">//Charge!</span></code></pre></div>
+<p><code>advance</code> sets your bot to move towards whatever is set as its destination.
+<aside class="notice">
+<code>advance</code> is the default behavior of the bot, so you don&rsquo;t need to call it unless you&rsquo;ve previously told it to do something other than <code>advance</code>.
+</aside></p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="bot-named-name">bot_named(name)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">bot_named</span><span class="p">(</span><span class="s2">&#34;SkerpSkerp&#34;</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="n">enemy</span><span class="o">!=</span><span class="kc">null</span><span class="p">){</span>
+    <span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><code>bot_named</code> allows you to select a bot by Twitch display name.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>name</td>
+<td>A <code>String</code> representing the name of the bot you are searching for.</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> with the name specified, or <code>null</code> if that bot is not alive or in the round.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="success">
+This function can be used both for team play, and for bullying people. How wonderful!
+</aside>
+
+<aside class="warning">
+It's very important to check whether this function returned <code>null</code> before trying to use it. If you try to use a <code>null</code> bot, your bot will crash and you will lose the round.
+</aside>
+
+<h2 id="bot-who-damaged-me">bot_who_damaged_me()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">bot_who_damaged_me</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="n">enemy</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;I will have my revenge!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Be sure to check for null!</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="c1">//BAD EXAMPLE</span>
+<span class="k">if</span><span class="p">(</span><span class="n">bot_who_damaged_me</span><span class="p">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">){</span>
+    <span class="n">target</span><span class="p">(</span><span class="n">bot_who_damaged_me</span><span class="p">());</span>
+    <span class="n">destination</span><span class="p">(</span><span class="n">bot_who_damaged_me</span><span class="p">());</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>At some point in the above example, it is likely that bot_who_shot_me will start returning null, which will crash your bot and forfeit the round.</p>
+</blockquote>
+
+<p>Returns a <a href="#bot"><code>Bot</code></a> reference to the bot who most recently dealt damage to you. Once checked, this is cleared, and will return <code>null</code> until you are damaged again.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> who just damaged us, or <code>null</code> if we have not been damaged, or already checked since being damaged.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='warning'>
+Using `bot_who_damaged_me` clears the record of you being damaged. As such, it is important to store the result, and use the stored result to perform any further operations.
+</aside>
+
+<aside class='notice'>
+This includes bots who have dealt a non-damaging status effect to your bot, such as the EMP effect from a Distruptor round.
+</aside>
+
+<h2 id="closest-bot">closest_bot()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//The variable enemy now contains the nearest living bot. It could be ourselves!</span></code></pre></div>
+<p>Gets the nearest not-dead bot to your bot.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> of the nearest living bot to your bot.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="notice">
+If you are the only bot left alive, this will return a <code>Bot</code> of yourself!
+</aside>
+
+<h2 id="closest-projectile">closest_projectile()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">will_hit</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;we&#39;re doomed&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Gets a <a href="#projectile-type"><code>Projectile</code></a> reference to the nearest projectile fired by an enemy. Returns <code>null</code> if there are no enemy projectiles in the arena.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Projectile</code></td>
+<td>The <code>Projectile</code> of the nearest enemy projectile to your bot.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="destination-target">destination(target)</h2>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>target</td>
+<td>Any object with an <code>id:Int</code> field. <code>Bot</code>s, directions (<code>LEFT</code>, <code>UP</code>, etc), sectors (<code>SECTOR3</code> etc) all work.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="notice">
+This is just an alias of <code>set_destination_to</code> to make typing quicker.
+</aside>
+
+<h2 id="get-energy-consumption">get_energy_consumption()</h2>
+
+<aside class="caution">
+This is an advanced technique.
+</aside>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">request_cpu_multiplier</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">log</span><span class="p">(</span><span class="n">get_energy_consumption</span><span class="p">());</span></code></pre></div>
+<p>Gets your bot&rsquo;s CPU&rsquo;s energy consumption in terms of percentage per second.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Float</td>
+<td>Percentage per second (so 50 would be 50%/s, emptying the energy bar in two seconds)</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='notice'>
+This has little to no use in battle, but can be useful in the testbed for tuning your overclocks. Energy consumption may change between patches, so it is worth checking your calculations are still relevant from time to time.
+</aside>
+
+<h2 id="keep-long-distance">keep_long_distance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="n">keep_long_distance</span><span class="p">();</span></code></pre></div>
+<p>Maintains a long distance to the target.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="keep-medium-distance">keep_medium_distance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="n">keep_medium_distance</span><span class="p">();</span></code></pre></div>
+<p>Maintains a medium distance to the target.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="keep-medium-long-distance">keep_medium_long_distance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="n">keep_medium_long_distance</span><span class="p">();</span></code></pre></div>
+<p>Maintains a medium-long distance to the target.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="keep-short-distance">keep_short_distance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="n">keep_short_distance</span><span class="p">();</span></code></pre></div>
+<p>Maintains a short distance to the target.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="keep-very-short-distance">keep_very_short_distance()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="n">keep_very_short_distance</span><span class="p">();</span></code></pre></div>
+<p>Maintains a very short distance to the target.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="log-anything">log(anything)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">log</span><span class="p">(</span><span class="s2">&#34;Hello World!&#34;</span><span class="p">);</span>    <span class="c1">//Logs &#34;Hello World!&#34; to the debug output box</span></code></pre></div>
+<p>Used for debugging your bot with the Testbed, this will output whatever you enter as an argument to the debug output box, as well as the line number that you called it from.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>anything</td>
+<td>You can really put just about anything here. If it&rsquo;s not text, the bot will attempt to turn it into text somehow.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="warning">
+Even though this does not do anything during actual battles, it will still waste CPU cycles! Best to comment it out when you're not testing.
+</aside>
+
+<h2 id="lowest-ammo-bot">lowest_ammo_bot()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">lowest_ammo_bot</span><span class="p">();</span></code></pre></div>
+<p>Selects the bot with the lowest remaining ammo. Will only return your own bot if there are no other living bots.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> with the lowest ammo</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="lowest-energy-bot">lowest_energy_bot()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">lowest_energy_bot</span><span class="p">();</span></code></pre></div>
+<p>Selects the bot with the lowest remaining energy. Will only return your own bot if there are no other living bots.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> with the lowest energy</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="lowest-hp-bot">lowest_hp_bot()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">lowest_hp_bot</span><span class="p">();</span></code></pre></div>
+<p>Selects the bot with the lowest remaining hp. Will only return your own bot if there are no other living bots.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> with the lowest hp</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="random-bot">random_bot()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span></code></pre></div>
+<p>Gets a reference to a random not-dead bot. It will not return your own bot unless all other bots are dead.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Bot</code></td>
+<td>The <code>Bot</code> of a randomly-selected living bot.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="random-int-max">random_int(max)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">random_int</span><span class="p">(</span><span class="mi">9</span><span class="p">));</span> <span class="c1">//sets the destination to a random sector</span></code></pre></div>
+<p>Returns a pseudo-random integer between 0 and <code>max</code>, inclusive.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>max</td>
+<td>A positive integer.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="warning">
+When <code>max</code> is negative, the behaviour is undefined.
+</aside>
+
+<h2 id="retreat">retreat()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//Select the nearest active bot (Could be yourself...!)</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//The enemy is our destination</span>
+<span class="n">retreat</span><span class="p">();</span>                  <span class="c1">//Run away!</span></code></pre></div>
+<p><code>retreat</code> moves your bot away from the set destination. It will not make any attempt to avoid backing into walls, etc.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="request-cpu-base-clock-clock">request_cpu_base_clock(clock)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">energy</span><span class="o">&gt;</span><span class="mi">50</span><span class="p">){</span>
+    <span class="n">request_cpu_base_clock</span><span class="p">(</span><span class="mi">300</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Attempts to change the base clock-rate of your bot&rsquo;s cpu.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>clock</td>
+<td>An integer between 1 and 500, inclusive</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='warning'>
+Increasing your base clock over the default will RAPIDLY consume energy per cpu instruction. If your energy drops to zero, you will return to default clock.
+</aside>
+
+<aside class='success'>
+Base clock is mainly for fine-tuning. For example, you could increase your multiplier to 2 and reduce your base clock to 150 if you only needed a slight bump.
+</aside>
+
+<aside class='notice'>
+The maximum clock/multiplier is due to the speed of SkerpSkerp's server. I can't give you more CPU than I have!!
+</aside>
+
+<h2 id="request-cpu-multiplier-mult">request_cpu_multiplier(mult)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">energy</span><span class="o">&gt;</span><span class="mi">50</span><span class="p">){</span>
+    <span class="n">request_cpu_multiplier</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Attempts to change the instructions-per-clock-cycle multiplier of your bot&rsquo;s cpu.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>mult</td>
+<td>An integer between 1 and 5, inclusive</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='warning'>
+Increasing your multiplier over the default will consume energy per cpu instruction. If your energy drops to zero, you will return to default multiplier.
+</aside>
+
+<aside class='notice'>
+The maximum clock/multiplier is due to the speed of SkerpSkerp's server. I can't give you more CPU than I have!!
+</aside>
+
+<h2 id="set-destination-to-target">set_destination_to(target)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR1</span><span class="p">);</span>    <span class="c1">//Destination will be the top-left sector.</span></code></pre></div>
+<p>Sets the destination of the bot&rsquo;s movement to &lsquo;target&rsquo;.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>target</td>
+<td>Any object with an <code>id:Int</code> field. <code>Bot</code>s, directions (<code>LEFT</code>, <code>UP</code>, etc), sectors (<code>SECTOR3</code> etc) all work. The integers 1-9 also work, representing the sectors 1-9.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="notice">
+This doesn't necessarily mean your bot will move towards the destination - using commands like <code>strafe_left()</code> will make it move differently *relative* to the target area.
+</aside>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="set-target-to-target">set_target_to(target)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//Select the nearest active bot (Could be yourself...!)</span>
+<span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>       <span class="c1">//Bring all items to bear!</span></code></pre></div>
+<p>Sets the target of all aimable items your bot is equipped with to &lsquo;target&rsquo;. Target is any object with an <code>id:Int</code> field.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>target</td>
+<td>Any object with an <code>id:Int</code> field. <code>Bot</code>, directions (<code>LEFT</code>, <code>UP</code>, etc), sectors (<code>SECTOR3</code> etc) all work. The integers 1-9 also work, representing the sectors 1-9.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="set-sleep-timer-seconds">set_sleep_timer(seconds)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_sleep_timer</span><span class="p">(</span><span class="mf">2.5</span><span class="p">);</span>
+<span class="n">sleep_until</span><span class="p">(</span><span class="n">TIMER</span><span class="p">);</span> <span class="c1">//sleep for 2.5 seconds</span></code></pre></div>
+<p>Sets the time to be used when you call <code>sleep_until</code> with the <code>TIMER</code> argument.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>seconds</td>
+<td>A positive Float giving the time to sleep in seconds.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='info'>
+The sleep timer setting is never cleared - if you call <code>sleep_until(TIMER)</code> twice after calling <code>set_sleep_timer(2.5)</code> once, you will sleep for 5 seconds in total.
+</aside>
+
+<aside class='warning'>
+Setting the sleep timer doesn't do anything unless you also call <code>sleep_until</code> with the <code>TIMER</code> argument!
+</aside>
+
+<h2 id="set-throttle-percentage">set_throttle(percentage)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_throttle</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span> <span class="c1">//move at 50% speed</span></code></pre></div>
+<p>Sets your bot to move with a different percentage of its available acceleration.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>percentage</td>
+<td>An integer between 0 and 100 representating a percentage number of power output.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="sleep-until-code">sleep_until(code)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">sleep_until</span><span class="p">(</span><span class="n">UPDATE</span><span class="p">);</span> <span class="c1">//Sleep until we get information from the arena</span>
+<span class="n">log</span><span class="p">(</span><span class="s2">&#34;good morning!&#34;</span><span class="p">);</span> <span class="c1">//Will only get to hear when an update has arrived</span></code></pre></div>
+<blockquote>
+<p>Your bot only gets updates 60 times a second, so you can save energy not acting on the same data twice.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_sleep_timer</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">//set sleep timer for 5 seconds</span>
+<span class="n">sleep_until</span><span class="p">(</span><span class="n">POWERUP_APPEARS</span><span class="o">|</span><span class="n">TIMER</span><span class="p">);</span> <span class="c1">//sleep until either the timer runs out or a powerup appears</span></code></pre></div>
+<blockquote>
+<p>Prevent waiting too long for an event by also setting a timer.</p>
+</blockquote>
+
+<p><code>sleep until</code> pauses the CPU until the specified conditions are met.</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>code</td>
+<td>A bit field. Bit values are defined in constants (TIMER, UPDATE, etc).</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='info'>
+You can set multiple wake conditions using bitwise or (|). For example, to wake on UPDATE or POWERUP_APPEARS, use <code>sleep_until(UPDATE|POWERUP_APPEARS)</code>.
+</aside>
+
+<aside class='success'>
+No matter how high your clock rate and multiplier settings, the CPU does not consume energy while sleeping.
+</aside>
+
+<h2 id="stop-advancing">stop_advancing()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">stop_advancing</span><span class="p">();</span></code></pre></div>
+<p>Stops the bot moving towards the destination. It will now sit still unless strafing.</p>
+
+<h2 id="stop-moving">stop_moving()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">stop_moving</span><span class="p">();</span></code></pre></div>
+<p>Stops all movement (strafing and retreating/advancing) in one command. The bot will stop still.</p>
+
+<aside class='warning'>
+Using <code>advance</code>, <code>retreat</code>, <code>stop_moving</code>, or changing destination with <code>set_destination_to</code> or <code>destination</code> will cancel any <code>keep distance</code> commands.
+</aside>
+
+<h2 id="stop-retreating">stop_retreating()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">stop_retreating</span><span class="p">();</span></code></pre></div>
+<p>An alias of <code>stop_advancing</code>.</p>
+
+<h2 id="stop-strafing">stop_strafing()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">stop_strafing</span><span class="p">();</span></code></pre></div>
+<p>Cancels any left or right strafing movement.</p>
+
+<h2 id="strafe-left">strafe_left()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//Select the nearest active bot (Could be yourself...!)</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//The enemy is our destination</span>
+<span class="n">strafe_left</span><span class="p">();</span>              <span class="c1">//Orbit clockwise</span></code></pre></div>
+<p><code>strafe_left</code> moves the bot clockwise around the set destination. It makes no attempt to maintain current range.</p>
+
+<h2 id="strafe-right">strafe_right()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>  <span class="c1">//Select the nearest active bot (Could be yourself...!)</span>
+<span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>  <span class="c1">//The enemy is our destination</span>
+<span class="n">strafe_left</span><span class="p">();</span>              <span class="c1">//Orbit counter-clockwise</span></code></pre></div>
+<p><code>strafe_right</code> moves the bot counter-clockwise around the set destination. It makes no attempt to maintain current range.</p>
+
+<h2 id="target-target">target(target)</h2>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>target</td>
+<td>Any object with an <code>id:Int</code> field. <code>Bot</code>s, directions (<code>LEFT</code>, <code>UP</code>, etc), sectors (<code>SECTOR3</code> etc) all work.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="notice">
+This is just an alias of <code>set_destination_to</code> to make typing quicker.
+</aside>
+
+<h2 id="woke-on">woke_on()</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_sleep_timer</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>                    <span class="c1">//set sleep timer for 10 seconds</span>
+<span class="n">sleep_until</span><span class="p">(</span><span class="n">POWERUP_APPEARS</span><span class="o">|</span><span class="n">TIMER</span><span class="p">);</span>     <span class="c1">//sleep until timer or powerup</span>
+<span class="k">switch</span><span class="p">(</span><span class="n">woke_on</span><span class="p">()){</span>                      <span class="c1">//if we woke on...</span>
+    <span class="k">case</span> <span class="n">POWERUP_APPEARS</span><span class="p">:</span>               <span class="c1">//a powerup</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&#34;Woo, powerup!&#34;</span><span class="p">);</span>           <span class="c1">//do this</span>
+    <span class="k">case</span> <span class="n">TIMER</span><span class="p">:</span>                         <span class="c1">//a timer</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&#34;I&#39;m sick of waiting...&#34;</span><span class="p">);</span>  <span class="c1">//do this</span>
+<span class="p">}</span></code></pre></div>
+<p>Gets the <code>SleepCode</code> that we last came out of a <code>sleep_until</code> on.</p>
+
+<table>
+<thead>
+<tr>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SleepCode</td>
+<td>A SleepCode, such as POWERUP_APPEARS or UPDATE</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='success'>
+Using <code>woke_on</code> allows you to quickly change behaviour to suit the conditions after sleeping on multiple conditions.
+</aside>
+
+    
+        
+
+<h1 id="properties">Properties</h1>
+
+<p>These are variables and objects that are accessible from anywhere within your bot code.</p>
+
+<h2 id="battle">battle</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">battle</span><span class="p">.</span><span class="n">over</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;Home time!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#battledetails"><code>BattleDetails</code></a> object reference, containing information about this bout.</p>
+
+<h2 id="i">I</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">I</span><span class="p">.</span><span class="n">am</span><span class="p">.</span><span class="n">above</span><span class="p">(</span><span class="n">him</span><span class="p">)){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;Wa ha ha&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Our <a href="#self"><code>Self</code></a> object. Contains useful info about our own bot&rsquo;s status.</p>
+
+<h2 id="item1">item1</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#item"><code>Item</code></a> installed in Slot #1.</p>
+
+<h2 id="item2">item2</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item2</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item2</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#item"><code>Item</code></a> installed in Slot #2.</p>
+
+<h2 id="item3">item3</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item3</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item3</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#item"><code>Item</code></a> installed in Slot #3.</p>
+
+<h2 id="item4">item4</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item4</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item4</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#item"><code>Item</code></a> installed in Slot #4.</p>
+
+<h2 id="my">my</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">hp</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;yabai&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Our <a href="#self"><code>Self</code></a> object. Contains useful info about our own bot&rsquo;s status.</p>
+
+<h2 id="me">me</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="n">enemy</span> <span class="o">==</span> <span class="n">me</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;Oh... guess I won!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Our own <a href="#bot"><code>Bot</code></a> object. Not really useful for much other than comparing to other <code>Bot</code> objects.</p>
+
+<h2 id="powerup">powerup</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">available</span><span class="p">){</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">powerup</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>The <a href="#powerup"><code>Powerup</code></a> object. Contains handy info about the state of powerups in the game world.</p>
+
+    
+        
+
+<h1 id="types">Types</h1>
+
+<p>There are several datatypes with their own properties and methods that are used to control your bot.</p>
+
+<aside class="notice">
+All of the read-only data in these types are updated 60 times a second. Commands made by calling methods and so on are also only delivered to the rest of the bot's hardware 60 times a second.
+</aside>
+
+<aside class="success">
+These types aren't the physical objects themselves - they are only ways to organize information our bot knows about them. Even if you try to set an enemy's HP to zero, they won't die!
+</aside>
+
+<h2 id="position-type">Position (Type)</h2>
+
+<p><code>Position</code> is the base object for many objects available in your bot code. Any object that extends <code>Position</code> can have its whereabouts queried in relation to other objects, and can be targeted or used as a destination. The methods and properties described in this class are available in every Type labeled &lsquo;extends Position&rsquo;.</p>
+
+<h3 id="availibility">Availibility</h3>
+
+<p><code>Position</code> can never be used directly, but it is the base object for <code>Powerup</code>, <code>Bot</code>, <code>Bullet</code>, and <code>Self</code>, so all of the following methods and properties are available in all of those objects.</p>
+
+<h3 id="methods">Methods</h3>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Arguments</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>above(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if the obj is above the <code>Bot</code>.</td>
+</tr>
+
+<tr>
+<td>below(obj)</td>
+<td>(as above)</td>
+<td>Bool</td>
+<td>True if the obj is below the <code>Bot</code>.</td>
+</tr>
+
+<tr>
+<td>close_to(obj)</td>
+<td>(as above)</td>
+<td>Bool</td>
+<td>True if the object is close enough to the <code>Bot</code> to hit with a Saw.</td>
+</tr>
+
+<tr>
+<td>closer(than, to)</td>
+<td>than, to - both Position-based objects.</td>
+<td>Bool</td>
+<td>True if the object is closer to &lsquo;to&rsquo; than &lsquo;than&rsquo; is to &lsquo;to&rsquo;.</td>
+</tr>
+
+<tr>
+<td>left_of(obj)</td>
+<td>(as above)</td>
+<td>Bool</td>
+<td>True if the obj is to the left of the <code>Bot</code>.</td>
+</tr>
+
+<tr>
+<td>right_of(obj)</td>
+<td>(as above)</td>
+<td>Bool</td>
+<td>True if the obj is to the right of the <code>Bot</code>.</td>
+</tr>
+
+<tr>
+<td>short_range_to(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if the obj is within range of short-range weapons</td>
+</tr>
+
+<tr>
+<td>medium_range_to(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if the obj is within range of medium-range weapons</td>
+</tr>
+
+<tr>
+<td>medium_long_range_to(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if the obj is within range of medium-long-range weapons</td>
+</tr>
+
+<tr>
+<td>long_range_to(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if the obj is within range of long-range weapons</td>
+</tr>
+
+<tr>
+<td>will_hit(obj)</td>
+<td>obj - a Position-based object</td>
+<td>Bool</td>
+<td>True if, at their current speeds and headings, the supplied <code>obj</code> will collide with this object at some point.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="properties">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>sector</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The sector that the Position object is in (1 to 9)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="battledetails-type">BattleDetails (Type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">battle</span><span class="p">.</span><span class="n">over</span> <span class="o">&amp;&amp;</span> <span class="n">winner</span> <span class="o">==</span> <span class="n">me</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;yeet&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Contains information about the state of this bout.</p>
+
+<aside class="success">
+It often pays to be cautious when there are many bots remaining, but aggressive when there are few!
+</aside>
+
+<h3 id="availability">Availability</h3>
+
+<p>Available anywhere in code as <code>battle</code>.</p>
+
+<h3 id="properties-1">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>entrants</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The number of bots in this bout.</td>
+</tr>
+
+<tr>
+<td>over</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True if the bout has ended; false otherwise.</td>
+</tr>
+
+<tr>
+<td>survivors</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The number of bots still active.</td>
+</tr>
+
+<tr>
+<td>time_remaining</td>
+<td>Int</td>
+<td>Read only</td>
+<td>Time in seconds remaining in the bout.</td>
+</tr>
+
+<tr>
+<td>winner</td>
+<td>Bot</td>
+<td>Read only</td>
+<td>Reference to the round winner. Null if the round hasn&rsquo;t ended yet.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="bot-type">Bot (Type)</h2>
+
+<p><strong>extends <a href="#position-type">Position</a>.</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> enemy <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span> <span class="c1">//enemy now contains a `Bot`</span>
+<span class="k">if</span><span class="p">(</span><span class="n">enemy</span><span class="p">.</span><span class="n">hp</span> <span class="o">&gt;</span> <span class="n">my</span><span class="p">.</span><span class="n">hp</span><span class="p">){</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+    <span class="n">retreat</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Most tactical decisions will resolve around <code>Bot</code> objects!</p>
+</blockquote>
+
+<p><code>Bot</code> objects are our main way of knowing about other bots in the arena. They can be used for targeting, and queried about their position and status.</p>
+
+<h3 id="availability-1">Availability</h3>
+
+<p>Returned by various methods. Our own is always available as <code>me</code>.</p>
+
+<h3 id="properties-2">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ammo</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The remaining ammo percentage of the bot as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>alive</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True if they are. False if they ain&rsquo;t.</td>
+</tr>
+
+<tr>
+<td>energy</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The remaining energy percentage of the bot as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>hp</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The remaining HP percentage of the bot as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>id</td>
+<td>Int</td>
+<td>Read only</td>
+<td>This bot&rsquo;s entry number. Not very useful.</td>
+</tr>
+
+<tr>
+<td>is</td>
+<td>Bot</td>
+<td>Read only</td>
+<td>Self-referential. So you can do stuff like <code>if(enemy.is.above(me))</code>.</td>
+</tr>
+
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Read only</td>
+<td>The bot&rsquo;s name. If you want to team up with someone, this could be useful!</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="item-type">Item (Type)</h2>
+
+<blockquote>
+<p>Target a new enemy if the old one is dead. Fire if we&rsquo;re on target! This is a common control routine for a cannon-type item.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">enemy</span><span class="p">.</span><span class="n">alive</span> <span class="o">==</span> <span class="kc">false</span><span class="p">){</span>
+    <span class="n">enemy</span> <span class="o">=</span> <span class="n">closest_bot</span><span class="p">();</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">set_target_to</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">()</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Activate your saw if your enemy is in range!</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">enemy</span><span class="p">.</span><span class="n">is</span><span class="p">.</span><span class="n">close_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">activate</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+    <span class="n">item2</span><span class="p">.</span><span class="n">deactivate</span><span class="p">();</span> <span class="c1">//Saws use energy quickly, so turn them off when they&#39;re not in use!</span>
+<span class="p">}</span></code></pre></div>
+<p><code>Item</code> objects are your way of communicating with weapons and devices installed on your bot. Even though all of these properties and methods are available on every <code>Item</code>, not every item will make use of or respond to them. Think of it as a generic television - not every button works on every TV.</p>
+
+<h3 id="availability-2">Availability</h3>
+
+<p>Your bot has 4 item slots, available in code as <code>item1</code> to <code>item4</code>. All of these are <code>Item</code> objects. Even if you don&rsquo;t install an item in a slot, there will be a placeholder <code>Item</code> object there.</p>
+
+<h3 id="properties-3">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>activated</td>
+<td>Bool</td>
+<td>Read/write</td>
+<td>Set to true if you want to attempt to activate this item. False if you wish to deactivate it.</td>
+</tr>
+
+<tr>
+<td>active</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True if the item is currently running. (Not all items can be activated; some only can be fired.)</td>
+</tr>
+
+<tr>
+<td>ready</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True only if the item is on-target, off-cooldown, and has enough energy or ammo to fire or activate.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="methods-1">Methods</h3>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Arguments</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>fire()</td>
+<td>None</td>
+<td>Void</td>
+<td>Attempt to fire this item. (Not all items can be fired.)</td>
+</tr>
+
+<tr>
+<td>activate()</td>
+<td>None</td>
+<td>Void</td>
+<td>Attempt to activate this item. Same as <code>item.active=true;</code></td>
+</tr>
+
+<tr>
+<td>deactivate()</td>
+<td>None</td>
+<td>Void</td>
+<td>Attempt to deactivate this item. Same as <code>item.active=false;</code></td>
+</tr>
+
+<tr>
+<td>set_target_to(targetable)</td>
+<td>targetable (object with id:Int field)</td>
+<td>Void</td>
+<td>Set this item to target <code>targetable</code></td>
+</tr>
+
+<tr>
+<td>target(targetable)</td>
+<td>targetable (object with id:Int field)</td>
+<td>Void</td>
+<td>Shorthand for <code>set_target_to</code></td>
+</tr>
+</tbody>
+</table>
+
+<aside class="success">
+Using the global <code>set_target_to</code> command has the same effect as calling <code>set_target_to</code> on all of your items one by one. Since it's only one call, it's faster CPU-wise to use the global comand when you don't need to target different targets with different items.
+</aside>
+
+<h2 id="powerup-type">Powerup (Type)</h2>
+
+<p><strong>extends <a href="#position-type">Position</a>.</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">active</span> <span class="o">&amp;&amp;</span> <span class="n">powerup</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">HP</span> <span class="o">&amp;&amp;</span> <span class="n">my</span><span class="p">.</span><span class="n">hp</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">){</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">powerup</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>The <code>Powerup</code> type contains information about the status of the powerup in the arena. There can only be one powerup active at a time, and it is often unavailable.</p>
+
+<h3 id="availability-3">Availability</h3>
+
+<p>There is only one, and it is available in the global <code>powerup</code> property.</p>
+
+<h3 id="properties-4">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>available</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True if the powerup has appeared. False otherwise.</td>
+</tr>
+
+<tr>
+<td>is</td>
+<td>Powerup</td>
+<td>Read only</td>
+<td>Self-referential. So you can do stuff like <code>if(enemy.is.above(me))</code>.</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>Int</td>
+<td>Read only</td>
+<td>The type (ammo, hp, energy) of this powerup. Use <code>HP</code>, <code>AMMO</code>, <code>ENERGY</code> constants to compare.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="projectile-type">Projectile (Type)</h2>
+
+<p><strong>extends <a href="#position-type">Position</a>.</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">is</span><span class="p">.</span><span class="n">short_range_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;Yikes!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>The <code>Projectile</code> type contains information about projectiles fired from weapons, such as Disruptor rounds or Cannon rounds.</p>
+
+<h3 id="availability-4">Availability</h3>
+
+<p>Returned by methods such as <code>closest_projectile()</code>.</p>
+
+<h3 id="properties-5">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>exists</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>True if the projectile still exists. False if it has disappeared somehow.</td>
+</tr>
+
+<tr>
+<td>is</td>
+<td>Powerup</td>
+<td>Read only</td>
+<td>Self-referential. So you can do stuff like <code>if(bullet.is.above(me))</code>.</td>
+</tr>
+
+<tr>
+<td>owner</td>
+<td>Bot</td>
+<td>Read only</td>
+<td>A reference to the bot that fired this projectile.</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Read only</td>
+<td>The type of weapon this projectile was fired from. Use <code>CANNON</code>, <code>DISRUPTOR</code>, etc constants to compare.</td>
+</tr>
+</tbody>
+</table>
+
+<aside class='success'>
+Projectiles don't usually last for very long - maybe a few seconds at best. It's important to check that a projectile still exists before you make any major decisions about it!
+</aside>
+
+<h2 id="self-type">Self (Type)</h2>
+
+<p><strong>extends <a href="#position-type">Position</a>.</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">my</span><span class="p">.</span><span class="n">hp</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">){</span>
+    <span class="n">set_destination_to</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">());</span> <span class="c1">//Run awaaaaay!</span>
+    <span class="n">retreat</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p>The <code>Self</code> type holds details about our own bot. It&rsquo;s a good idea to adjust your strategy based on your remaining HP, ammo, and energy.</p>
+
+<aside class="notice">
+Sorry, you can't boost your own HP with tricks like <code>my.hp = 100;</code>. Think of <code>Self</code> as a report card. 
+</aside>
+
+<h3 id="availibility-1">Availibility</h3>
+
+<p>You can always get your own <code>Self</code> with the <code>my</code> and <code>I</code> global properties.</p>
+
+<h3 id="properties-6">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ammo</td>
+<td>Int</td>
+<td>Read only</td>
+<td>Your remaining ammo percentage as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>am</td>
+<td>Self</td>
+<td>Read only</td>
+<td>Self-referential. So you can do stuff like <code>if(I.am.close_to(enemy))</code>.</td>
+</tr>
+
+<tr>
+<td>energy</td>
+<td>Int</td>
+<td>Read only</td>
+<td>Your remaining energy percentage as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>hp</td>
+<td>Int</td>
+<td>Read only</td>
+<td>Your remaining HP percentage as an integer. Ranges from 0 to 100.</td>
+</tr>
+
+<tr>
+<td>name</td>
+<td>String</td>
+<td>Read only</td>
+<td>Your own name. Hopefully you don&rsquo;t need this.</td>
+</tr>
+</tbody>
+</table>
+
+    
+        
+
+<h1 id="items">Items</h1>
+
+<p>Each bot can carry four items. Items can have offensive, defensive, or aesthetic abilities. Items generally consume ammo, energy, or make your bot slower due to their weight. All items use the same interface to control them, but not all items make use of all the interface&rsquo;s options. This section explains how to use each item, and gives an idea of its capabilities.</p>
+
+<h2 id="interface">Interface</h2>
+
+<p>All items, regardless of their type, have the same properties and methods. Most items do not make use of all of them at once, however.</p>
+
+<h3 id="availability">Availability</h3>
+
+<blockquote>
+<p>It can improve readability to put your items in nicely-named variables.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> cannon <span class="o">=</span> <span class="n">item1</span><span class="p">;</span>   <span class="c1">//Assuming you put a cannon in slot 1</span>
+<span class="n">cannon</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>        <span class="c1">//now you can use cannon just like it was item1!</span></code></pre></div>
+<p>You can access your bots&rsquo; items via the properties <code>item1</code>, <code>item1</code>, <code>item3</code>, and <code>item4</code> from anywhere in your program.</p>
+
+<h3 id="properties">Properties</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>active</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>Whether the item is currently engaged. Not all items need to be engaged to use.</td>
+</tr>
+
+<tr>
+<td>activated</td>
+<td>Bool</td>
+<td>Read/write</td>
+<td>Whether you have requested for the item to be engaged.</td>
+</tr>
+
+<tr>
+<td>ready</td>
+<td>Bool</td>
+<td>Read only</td>
+<td>Whether the item is ready to use. The specific meaning of this differs between items.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="methods">Methods</h3>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Arguments</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>fire()</td>
+<td>N/A</td>
+<td>Void</td>
+<td>Requests that the item fires.</td>
+</tr>
+
+<tr>
+<td>activate()</td>
+<td>N/A</td>
+<td>Void</td>
+<td>Sets &ldquo;activated&rdquo; to true, requesting activation.</td>
+</tr>
+
+<tr>
+<td>deactivate()</td>
+<td>N/A</td>
+<td>Void</td>
+<td>Sets &ldquo;activated&rdquo; to false, requestion deactivation.</td>
+</tr>
+
+<tr>
+<td>set_target_to(obj)</td>
+<td>obj - a targetable object (an enemy, sector, etc)</td>
+<td>Void</td>
+<td>Targets the supplied targetable object with just this device.</td>
+</tr>
+
+<tr>
+<td>target(obj)</td>
+<td>(as above)</td>
+<td>Void</td>
+<td>Shorthand for the above (identical).</td>
+</tr>
+</tbody>
+</table>
+
+<aside class="warning">
+Calling the global command "set_target_to" will override any devices' individually-set targets.
+</aside>
+
+<aside class="success">
+Items don't need to be activated to use them, unless their instructions specifically say they do. Many items, like the cannon, take no notice whatsoever of activation status. Similarly, there are items that cannot be fired.
+</aside>
+
+<aside class="success">
+You can target any object you can move to with <code>set_destination_to</code>, including bots, the powerup, sectors, and directions.
+</aside>
+
+<aside class="notice">
+All of the code snippets in this section assume that the item being demonstrated is in item slot 1 (<code>item1</code>).
+</aside>
+
+<h2 id="cannon">Cannon</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">item1</span><span class="p">.</span><span class="n">set_target_to</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">());</span></code></pre></div>
+<blockquote>
+<p>Target leading is automatic.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Checking ready makes sure you don&rsquo;t waste ammo shooting off in the distance while the turret comes around.</p>
+</blockquote>
+
+<h3 id="description">Description</h3>
+
+<p>The cannon is your basic single-shot projectile weapon. It&rsquo;s mounted on a swivelling turret, which rotates to face the target. All bots start the round with their cannons facing away from the center of the arena.</p>
+
+<p>Cannons only report <code>ready</code> as true when they are on-target, off-cooldown, and have sufficient ammo. You can still fire the cannon when it&rsquo;s off-target, but there is no guarantee it will hit anything.</p>
+
+<h3 id="stats">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Ammo</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>Short</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="deflector">Deflector</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="kd">var</span> projectile <span class="o">=</span> <span class="n">closest_projectile</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="n">projectile</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">projectile</span><span class="p">.</span><span class="n">close_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">activate</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">deactivate</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>It&rsquo;s best not to leave the deflector on for too long - it goes through energy very fast!</p>
+</blockquote>
+
+<h3 id="description-1">Description</h3>
+
+<p>The Deflector is an energy-powered defensive item that is used to repel back enemy projectiles.</p>
+
+<aside class="success">
+Projectiles deflected with the Deflector become 'yours' - meaning that if someone is damaged or destroyed by their ricoheting, you get credit for it!
+</aside>
+
+<aside class="warning">
+The Deflector can only deflect physical ammunition (cannon rounds, sniper shells, etc). Energy weapons like the Disruptor, and melee weapons like the Saw, will go straight through.
+</aside>
+
+<h3 id="stats-1">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Energy</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Melee</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Negligible</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-1">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="disruptor">Disruptor</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">item1</span><span class="p">.</span><span class="n">set_target_to</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">());</span></code></pre></div>
+<blockquote>
+<p>Target leading is automatic.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Checking ready makes sure you don&rsquo;t waste energy shooting off in the distance while the turret comes around.</p>
+</blockquote>
+
+<h3 id="description-2">Description</h3>
+
+<p>The disruptor is a ranged energy weapon. While it doesn&rsquo;t deal damage, it temporarily disables the victim, slowing their movement speed, processing speed, and item use for a short time.</p>
+
+<p>While its effect and specs are different, it handles the same as the cannon.</p>
+
+<aside class="success">
+Since processing speed is slowed, enemy bots will take much more time to react to the situation in the arena. This includes changing targets, reacting to powerups, and switching on their saw or other items.
+</aside>
+
+<h3 id="stats-2">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Energy</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Short</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>Fast</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>None</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>Long</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-2">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="grenade-launcher">Grenade Launcher</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">item1</span><span class="p">.</span><span class="n">set_target_to</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">());</span></code></pre></div>
+<blockquote>
+<p>Target leading is automatic.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Checking ready makes sure you don&rsquo;t waste ammo shooting off in the distance while the turret comes around.</p>
+</blockquote>
+
+<h3 id="description-3">Description</h3>
+
+<p>The Grenade Launcher fires grenades with a timed fuse. After their fuse expires, grenades explode, dealing damage to all bots within their blast radius, as well as violently pushing them away.</p>
+
+<p>Grenades will bounce off walls and other bots until their fuse runs out.</p>
+
+<p>Additionally, unexploded grenades deal impact damage dependent on their velocity.</p>
+
+<aside class="notice">
+Grenades deal more damage and knockback the closer a bot is to the center of the explosion.
+</aside>
+
+<aside class="warning">
+You can damage yourself with grenades, even fatally. The damage you deal to yourself is not added to your damage dealt score.
+</aside>
+
+<h3 id="stats-3">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Ammo</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>Long</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-3">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="saw">Saw</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">().</span><span class="n">is</span><span class="p">.</span><span class="n">close_to</span><span class="p">(</span><span class="n">me</span><span class="p">)){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">activate</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">deactivate</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>It&rsquo;s best not to leave the saw on for too long - it goes through energy very fast!</p>
+</blockquote>
+
+<h3 id="description-4">Description</h3>
+
+<p>The saw is a very powerful melee-range weapon. It uses a lot of energy in exchange for dealing a lot of damage.</p>
+
+<p>The saw deals damage all around the bot using it, to all bots within range.</p>
+
+<p>Once activated, the saw will continue running until it is either disabled or energy is depleted.</p>
+
+<aside class="success">
+If a bot is within <code>close_to</code> range, it is close enough to hit with the saw.
+</aside>
+
+<aside class="notice">
+The saw rotates clock-wise, and will push bots apart from each other due to the friction of its rotation.
+</aside>
+
+<h3 id="stats-4">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Energy</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Melee</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Negligible</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>N/A</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-4">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="shotgun">Shotgun</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">item1</span><span class="p">.</span><span class="n">set_target_to</span><span class="p">(</span><span class="n">closest_bot</span><span class="p">());</span></code></pre></div>
+<blockquote>
+<p>Target leading is automatic.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Checking ready makes sure you don&rsquo;t waste ammo shooting off in the distance while the turret comes around.</p>
+</blockquote>
+
+<h3 id="description-5">Description</h3>
+
+<p>The Shotgun is a medium-range weapon that fires a spray of projectiles. Since the projectiles spread, and each projectile does only minor damage, it is only effective at short range. If the majority of projectiles find their mark, it will deal devastating damage.</p>
+
+<p>The shotgun only reports <code>ready</code> as true when it is on-target, off-cooldown, and has sufficient ammo. You can still fire when off-target, but there is no guarantee you will hit anything.</p>
+
+<h3 id="stats-5">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Ammo</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>Low</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>Very low to very high</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>Medium</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-5">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="sniper">Sniper</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">item1</span><span class="p">.</span><span class="n">activate</span><span class="p">();</span>   <span class="c1">//The sniper must be powered on to function</span>
+<span class="n">item1</span><span class="p">.</span><span class="n">target</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>    <span class="c1">//Unlike the cannon, it won&#39;t fire unless ready</span>
+    <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span> 
+<span class="p">}</span></code></pre></div>
+<h3 id="description-6">Description</h3>
+
+<p>The Sniper is a long-range, high-damage, high-cost projectile weapon. Unlike most other turreted weapons, it must be activated in order to function. While the sniper is deactivated, it will not turn to its target or fire.</p>
+
+<p>While the Sniper is activated, it consumes energy. When energy is expended, you will not be able to use the Sniper even if you have sufficient ammunition.</p>
+
+<aside class='success'>
+You can visually confirm that the Sniper is active by its laser sight.
+</aside>
+
+<h3 id="stats-6">Stats</h3>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Consumes</strong></td>
+<td>Ammo</td>
+</tr>
+
+<tr>
+<td><strong>Cost</strong></td>
+<td>Very high (Firing) Medium (Aiming)</td>
+</tr>
+
+<tr>
+<td><strong>Range</strong></td>
+<td>Very long</td>
+</tr>
+
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>Very high</td>
+</tr>
+
+<tr>
+<td><strong>Damage</strong></td>
+<td>Very high</td>
+</tr>
+
+<tr>
+<td><strong>Weight</strong></td>
+<td>High</td>
+</tr>
+
+<tr>
+<td><strong>Aim Rate</strong></td>
+<td>Slow</td>
+</tr>
+
+<tr>
+<td><strong>Recoil</strong></td>
+<td>Very high</td>
+</tr>
+
+<tr>
+<td><strong>Cooldown</strong></td>
+<td>Very long</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="controls-6">Controls</h3>
+
+<table>
+<thead>
+<tr>
+<th>Targetable</th>
+<th>Activatable</th>
+<th>Reports ready</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+    
+        
+
+<h1 id="constants">Constants</h1>
+
+<p>All-caps properties like the following are just handy pre-defined variables for use with various functions.</p>
+
+<h2 id="hp-powerup-type">HP (Powerup type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">HP</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;I need that!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of <code>powerup.type</code>.</p>
+
+<h2 id="energy-powerup-type">ENERGY (Powerup type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">ENERGY</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;I need that!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of <code>powerup.type</code>.</p>
+
+<h2 id="ammo-powerup-type">AMMO (Powerup type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">powerup</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">AMMO</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;I need that!&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of <code>Powerup.type</code>.</p>
+
+<h2 id="cannon-projectile-type">CANNON (Projectile type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">type</span> <span class="o">==</span> <span class="n">CANNON</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;it is a cannonball&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of Projectile.type.</p>
+
+<h2 id="disruptor-projectile-type">DISRUPTOR (Projectile type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">type</span> <span class="o">==</span> <span class="n">DISRUPTOR</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;it is an emp burst&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of Projectile.type.</p>
+
+<h2 id="shotgun-projectile-type">SHOTGUN (Projectile type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">type</span> <span class="o">==</span> <span class="n">SHOTGUN</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;it is a shotgun pellet&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of Projectile.type.</p>
+
+<h2 id="sniper-projectile-type">SNIPER (Projectile type)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">if</span><span class="p">(</span><span class="n">closest_projectile</span><span class="p">().</span><span class="n">type</span> <span class="o">==</span> <span class="n">SNIPER</span><span class="p">){</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&#34;it is a sniper slug&#34;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>A possible value of Projectile.type.</p>
+
+<h2 id="update-sleepcode">UPDATE (SleepCode)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">enemy</span><span class="p">.</span><span class="n">alive</span><span class="p">){</span>
+        <span class="n">enemy</span> <span class="o">=</span> <span class="n">random_bot</span><span class="p">();</span>
+        <span class="n">target</span><span class="p">(</span><span class="n">enemy</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">item1</span><span class="p">.</span><span class="n">ready</span><span class="p">){</span>
+        <span class="n">item1</span><span class="p">.</span><span class="n">fire</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">sleep_until</span><span class="p">(</span><span class="n">UPDATE</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p>Neither enemy.alive nor item1.ready will change until we get new data from the arena, so it is a waste of cycles (and hence energy, if our CPU is overclocked) to keep checking them until that happens.</p>
+</blockquote>
+
+<p>An argument for <a href="#sleep-until-code"><code>sleep_until</code></a>, and a return code from <a href="#woke-on"><code>woke_on</code></a>. Used for sleeping until new data comes from your bot&rsquo;s external hardware.</p>
+
+<h2 id="timer-sleepcode">TIMER (SleepCode)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_sleep_timer</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">sleep_until</span><span class="p">(</span><span class="n">TIMER</span><span class="p">);</span></code></pre></div>
+<p>An argument for <a href="#sleep-until-code"><code>sleep_until</code></a>, and a return code from <a href="#woke-on"><code>woke_on</code></a>. Used for sleeping for the amount of time specified with <code>set_sleep_timer</code>.</p>
+
+<h2 id="powerup-appears-sleepcode">POWERUP_APPEARS (SleepCode)</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">sleep_until</span><span class="p">(</span><span class="n">POWERUP_APPEARS</span><span class="p">);</span></code></pre></div>
+<p>An argument for <a href="#sleep-until-code"><code>sleep_until</code></a>, and a return code from <a href="#woke-on"><code>woke_on</code></a>. Used for sleeping until a powerup appears in the arena.</p>
+
+<h2 id="up-left">UP_LEFT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">UP_LEFT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="up">UP</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">UP</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="up-right">UP_RIGHT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">UP_RIGHT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="left">LEFT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">LEFT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="right">RIGHT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">RIGHT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="down-left">DOWN_LEFT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">DOWN_LEFT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="down">DOWN</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">DOWN</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="down-right">DOWN_RIGHT</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">UP_LEFT</span><span class="p">);</span></code></pre></div>
+<p>A direction to travel. Can also be targeted with <code>set_target_to</code>.</p>
+
+<h2 id="sector1">SECTOR1</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR1</span><span class="p">);</span></code></pre></div>
+<p>Represents the top-left sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector2">SECTOR2</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR2</span><span class="p">);</span></code></pre></div>
+<p>Represents the top-middle sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector3">SECTOR3</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR3</span><span class="p">);</span></code></pre></div>
+<p>Represents the top-right sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector4">SECTOR4</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR4</span><span class="p">);</span></code></pre></div>
+<p>Represents the middle-left sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector5">SECTOR5</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR5</span><span class="p">);</span></code></pre></div>
+<p>Represents the middle sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector6">SECTOR6</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR6</span><span class="p">);</span></code></pre></div>
+<p>Represents the middle-right sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector7">SECTOR7</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR7</span><span class="p">);</span></code></pre></div>
+<p>Represents the bottom-left sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector8">SECTOR8</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR8</span><span class="p">);</span></code></pre></div>
+<p>Represents the bottom-middle sector of the arena if you divide it into a 9-square grid.</p>
+
+<h2 id="sector9">SECTOR9</h2>
+<div class="highlight"><pre class="chroma"><code class="language-haxe" data-lang="haxe"><span class="n">set_destination_to</span><span class="p">(</span><span class="n">SECTOR9</span><span class="p">);</span></code></pre></div>
+<p>Represents the bottom-right sector of the arena if you divide it into a 9-square grid.</p>
+
+    
+
+        </div>
+        <div class="dark-box">
+            
+            <div class="lang-selector">
+                
+                <a href="#" data-language-name="haxe">Usage</a>
+                
+                <a href="#" data-language-name="javascript">Bytecode</a>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+</html>
